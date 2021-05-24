@@ -2,11 +2,6 @@
   "IsEncrypted": false,
   "Values": {
     "FUNCTIONS_WORKER_RUNTIME": "python",
-    "AzureWebJobs.app.Disabled": "false",
-    "TENANT_ID": "ca1d08b0-9543-4bd9-8718-42becddc7786",
-    "SP_ID": "92edc83e-82bc-46a3-ab79-2fc09b752cd0",
-    "SP_SECRET": "KIylVhgU2D8b3AClexPw1QYhZXKH0R2SZ3/ACtIAqHA=",
-    "KeyVault_DNS": "https://chargecard764id.vault.azure.net/",
-    "SecretName": "Gen2ClusterConString"
+    "AzureWebJobs.app.Disabled": "false"
   }
 }
