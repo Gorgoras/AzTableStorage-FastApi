@@ -1,0 +1,16 @@
+{
+    "description": [
+      {
+        "name": "Tables",
+        "description": "Operations with tables. Make sure you pass **authentication** parameters!"
+      },
+      {
+        "name": "Data",
+        "description": "Manage data inside tables. Make sure you pass **authentication** parameters!",
+        "externalDocs": {
+          "description": "Table data docs",
+          "url": "https://github.com/Gorgoras/AzureTableStorage-Api/tree/master/documentation"
+        }
+      }
+    ]
+  }

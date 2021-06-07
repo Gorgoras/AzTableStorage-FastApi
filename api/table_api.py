@@ -1,6 +1,6 @@
 import azure.functions as func
 from .http_asgi import AsgiMiddleware
-import fastapi, os, sys
+import fastapi, os, sys, json
 from fastapi import Form, Depends
 from typing import Optional
 from azure.cosmosdb.table.tableservice import TableService
@@ -9,8 +9,17 @@ root_folder = os.path.abspath(os.path.dirname(os.path.dirname(os.path.abspath(__
 sys.path.append(root_folder)
 from functions.createTable import createTable as funcCreateTable
 from functions.deleteTable import deleteTable as funcDeleteTable
+from functions.truncateTable import truncateTable as funcTruncateTable
 
-app = fastapi.FastAPI()
+
+tags_metadata = open("./api/tag_descriptions.json", "r").read()
+
+app = fastapi.FastAPI(
+    title='Table storage API',
+    description='API to simplify usage of Azure Storage Tables',
+    version='0.1.0',
+    openapi_tags=json.loads(tags_metadata)['description']
+)
 
 
 async def con_parameters(conn_string: Optional[str] = Form(None), acc_name: Optional[str] = Form(None), 
@@ -31,7 +40,7 @@ def getTableService(connection_parameters):
             table_service = TableService(account_name=connection_parameters['acc_name'], account_key=connection_parameters['sas_token'])
     return table_service
 
-@app.post('/createTable')
+@app.post('/createTable', tags=['Tables'])
 async def create_table(tableName: str = Form(...), con_params: dict = Depends(con_parameters)):
     table_service = getTableService(con_params)
     if table_service != None:
@@ -40,11 +49,20 @@ async def create_table(tableName: str = Form(...), con_params: dict = Depends(co
         response = {"message": "Missing key authentication data", "status": 400}
     return response
 
-@app.post('/deleteTable')
+@app.post('/deleteTable', tags=['Tables'])
 async def delete_table(tableName: str = Form(...), con_params: dict = Depends(con_parameters)):
     table_service = getTableService(con_params)
     if table_service != None:
         response = funcDeleteTable(tableName, table_service)
+    else:
+        response = {"message": "Missing key authentication data", "status": 400}
+    return response
+
+@app.post('/truncateTable', tags=['Tables'])
+async def truncate_table(tableName: str = Form(...), con_params: dict = Depends(con_parameters)):
+    table_service = getTableService(con_params)
+    if table_service != None:
+        response = funcTruncateTable(tableName, table_service)
     else:
         response = {"message": "Missing key authentication data", "status": 400}
     return response
